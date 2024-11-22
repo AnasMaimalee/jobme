@@ -22,12 +22,12 @@
             </div>
             <div class="space-x-5">
                 <a href="">Jobs</a>
-                <a href="">Carriesr</a>
+                <a href="">Carriear</a>
                 <a href="">Salaries</a>
                 <a href="">Companies</a>
             </div>
             <div>
-                post a job
+                <x-section-heading>Post A Job</x-section-heading>
             </div>
         </nav>
         <main class="mt-10 max-w-[986px] mx-auto">

@@ -9,7 +9,7 @@
         <div>
             <x-tag size="small">Frontend</x-tag>
             <x-tag size="small">Backend</x-tag>
-            <x-tag size="small">Mnager</x-tag>
+            <x-tag size="small">Manager</x-tag>
         </div>
 
         <x-employer-logo :width="42" />

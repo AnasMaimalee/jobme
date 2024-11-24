@@ -26,9 +26,28 @@
                 <a href="">Salaries</a>
                 <a href="">Companies</a>
             </div>
-            <div>
-                <x-section-heading>Post A Job</x-section-heading>
-            </div>
+
+            @auth
+
+                <div class="flex justify-between items-center">
+                    <x-section-heading><a href="/jobs/create">Post A Job</a></x-section-heading>
+
+                    <x-forms.form method="POST" action="/logout" enctype="multipart/form-data">
+
+                        <x-forms.button>Logout</x-forms.button>
+
+                    </x-forms.form>
+                </div>
+
+            @endauth
+
+            @guest
+                <div class="space-x-5">
+                    <a href="/register">Sign Up</a>
+                    <a href="/login">Register</a>
+                </div>
+            @endguest
+
         </nav>
         <main class="mt-10 max-w-[986px] mx-auto">
             {{ $slot }}

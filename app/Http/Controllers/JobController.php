@@ -93,7 +93,6 @@ class JobController extends Controller
             'featured' => 'nullable|boolean',
         ]);
 
-        // Update the job fields
         $job->update([
             'title' => $attributes['title'],
             'salary' => $attributes['salary'],
@@ -103,17 +102,12 @@ class JobController extends Controller
             'featured' => $request->has('featured'), // Handle the featured checkbox
         ]);
 
-        // Handle updating tags
         if ($attributes['tags'] ?? false) {
-            // Remove existing tags and add the new ones
-            $job->tags()->detach(); // Detach current tags
-
-            foreach (explode(',', $attributes['tags']) as $tag) {
-                $job->tag($tag); // Add new tags
-            }
+            $tagIds = Tag::whereIn('name', explode(',', $attributes['tags']))->pluck('id');
+            $job->tags()->sync($tagIds); // Sync the tags with the provided list
         }
 
-        return redirect()->route('jobs.show', $job);
+        return redirect('/jobs/' . $job->id);
     }
 
 

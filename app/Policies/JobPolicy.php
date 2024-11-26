@@ -13,7 +13,8 @@ class JobPolicy
      */
     public function edit(User $user, Job $job): bool
     {
-        return $job->employer->user->is($user);
+        $user = auth()->user();
+        return ($user->role === 'admin' || $job->employer->user->is($user));
     }
 
     /**

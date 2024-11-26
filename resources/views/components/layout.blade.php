@@ -21,10 +21,9 @@
                 </a>
             </div>
             <div class="space-x-5">
-                <a href="">Jobs</a>
-                <a href="">Carriear</a>
-                <a href="">Salaries</a>
-                <a href="">Companies</a>
+                <a href="/">Jobs</a>
+                <a href="/salary">Salaries</a>
+                <a href="/employers">Companies</a>
             </div>
 
             @auth

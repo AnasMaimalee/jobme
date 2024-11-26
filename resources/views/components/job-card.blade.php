@@ -12,7 +12,6 @@
                 <x-tag :$tag size="small">Manager</x-tag>
             @endforeach
         </div>
-
-        <x-employer-logo :width="42" />
+        <img src="{{ URL::asset('storage/'.$job->employer->logo) }}" style="width:60px" alt="Employer Logo">
     </div>
 </div>

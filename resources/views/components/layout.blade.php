@@ -29,13 +29,13 @@
 
             @auth
 
-                    <div class="space-x-5">
+                    <div class="space-x-5 flex items-center">
                         <a href="/jobs/create">Post Job</a>
-{{--                        <x-forms.form method="POST" action="/logout" enctype="multipart/form-data">--}}
-
-{{--                            <x-forms.button>Logout</x-forms.button>--}}
-
-{{--                        </x-forms.form>--}}
+                        <form method="POST" action="/logout">
+                            @csrf
+                            @method('DELETE')
+                            <button class="bg-red-700 p-2 rounded-md">Log Out</button>
+                        </form>
                     </div>
 
             @endauth

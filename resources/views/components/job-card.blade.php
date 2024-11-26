@@ -13,7 +13,7 @@
                     <x-tag :$tag size="small">Manager</x-tag>
                 @endforeach
             </div>
-            <img src="{{ URL::asset('storage/'.$job->employer->logo) }}" style="width:60px" alt="Employer Logo">
+            <img src="{{ URL::asset('storage/'.$job->employer->logo) }}" class="rounded-xl" style="width:60px" alt="Employer Logo">
         </div>
     </a>
 </div>

@@ -11,9 +11,9 @@ class JobPolicy
     /**
      * Determine whether the user can view any models.
      */
-    public function viewAny(User $user): bool
+    public function edit(User $user, Job $job): bool
     {
-        //
+        return $job->employer->user->is($user);
     }
 
     /**
@@ -37,7 +37,7 @@ class JobPolicy
      */
     public function update(User $user, Job $job): bool
     {
-        //
+        return $job->employer->user->is($user);
     }
 
     /**
@@ -45,7 +45,8 @@ class JobPolicy
      */
     public function delete(User $user, Job $job): bool
     {
-        //
+        return $job->employer->user->is($user);
+
     }
 
     /**

@@ -33,7 +33,7 @@
                         <form method="POST" action="/logout">
                             @csrf
                             @method('DELETE')
-                            <button class="bg-red-700 p-2 rounded-md">Log Out</button>
+                            <x-forms.button-danger >Log Out</x-forms.button-danger>
                         </form>
                     </div>
 

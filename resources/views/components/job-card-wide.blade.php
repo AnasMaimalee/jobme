@@ -1,7 +1,7 @@
 @props(['job'])
 <x-panel>
     <div>
-        <x-employer-logo />
+        <img src="{{ URL::asset('storage/'.$job->employer->logo) }}" style="width:60px" alt="Employer Logo">
     </div>
     <div class="flex-1 flex flex-col">
         <a class="self-start text-sm text-gray-500   font-bold">{{ $job->employer->name }}</a>

@@ -65,7 +65,7 @@ class JobController extends Controller
      */
     public function show(Job $job)
     {
-        //
+        return view('jobs.show', ['job' => $job]);
     }
 
     /**
@@ -73,16 +73,49 @@ class JobController extends Controller
      */
     public function edit(Job $job)
     {
-        //
+        return view('jobs.edit', [
+            'job' => $job
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateJobRequest $request, Job $job)
+    public function update(Request $request, Job $job)
     {
-        //
+        $attributes = $request->validate([
+            'title' => 'required',
+            'salary' => 'required',
+            'location' => 'required',
+            'schedule' => ['required', Rule::in(['Part Time', 'Full Time'])],
+            'url' => ['required', 'active_url'],
+            'tags' => 'nullable',
+            'featured' => 'nullable|boolean',
+        ]);
+
+        // Update the job fields
+        $job->update([
+            'title' => $attributes['title'],
+            'salary' => $attributes['salary'],
+            'location' => $attributes['location'],
+            'schedule' => $attributes['schedule'],
+            'url' => $attributes['url'],
+            'featured' => $request->has('featured'), // Handle the featured checkbox
+        ]);
+
+        // Handle updating tags
+        if ($attributes['tags'] ?? false) {
+            // Remove existing tags and add the new ones
+            $job->tags()->detach(); // Detach current tags
+
+            foreach (explode(',', $attributes['tags']) as $tag) {
+                $job->tag($tag); // Add new tags
+            }
+        }
+
+        return redirect()->route('jobs.show', $job);
     }
+
 
     /**
      * Remove the specified resource from storage.

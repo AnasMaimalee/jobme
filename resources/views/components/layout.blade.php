@@ -29,22 +29,21 @@
 
             @auth
 
-                <div class="flex justify-between items-center">
-                    <x-section-heading><a href="/jobs/create">Post A Job</a></x-section-heading>
+                    <div class="space-x-5">
+                        <a href="/jobs/create">Post Job</a>
+{{--                        <x-forms.form method="POST" action="/logout" enctype="multipart/form-data">--}}
 
-                    <x-forms.form method="POST" action="/logout" enctype="multipart/form-data">
+{{--                            <x-forms.button>Logout</x-forms.button>--}}
 
-                        <x-forms.button>Logout</x-forms.button>
-
-                    </x-forms.form>
-                </div>
+{{--                        </x-forms.form>--}}
+                    </div>
 
             @endauth
 
             @guest
                 <div class="space-x-5">
                     <a href="/register">Sign Up</a>
-                    <a href="/login">Register</a>
+                    <a href="/login">Login</a>
                 </div>
             @endguest
 

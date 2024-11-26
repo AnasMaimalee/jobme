@@ -7,9 +7,8 @@ use Illuminate\Http\Request;
 
 class TagController extends Controller
 {
-    public function __invoke()
+    public function __invoke(Tag $tag)
     {
-        $tags = Tag::where('name', 'like', '%' . request('q') . '%')->get();
-        return view('results', ['jobs' => $tags]);
+        return view('results', ['jobs' => $tag->jobs]);
     }
 }

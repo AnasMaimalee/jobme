@@ -20,7 +20,7 @@
 <!-- Sidebar and Main Layout -->
 <div class="flex">
     <!-- Sidebar -->
-    <div id="sidebar" class="w-64 bg-gray-800 text-white h-screen p-6 transition-all duration-300 ease-in-out">
+    <div id="sidebar" class="w-64 bg-gray-800 text-white h-screen p-6  border-e transition-all duration-300 ease-in-out">
         <h3 class="text-2xl font-semibold text-center mb-8">Admin Panel</h3>
         <ul>
             <li class="mb-4"><a href="{{ route('admin.dashboard') }}" class="hover:bg-gray-700 px-4 py-2 rounded block">Dashboard</a></li>
@@ -56,7 +56,6 @@
         <div class="flex justify-between items-center mb-8 bg-gray-800 p-2">
             <!-- Logo (Replace with your own logo) -->
             <div class="flex items-center">
-                <img src="https://via.placeholder.com/40" alt="Logo" class="w-10 h-10 mr-3">
                 <span class="text-2xl font-semibold text-gray-100">Admin Panel</span>
             </div>
 

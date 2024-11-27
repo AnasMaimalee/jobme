@@ -8,7 +8,7 @@
                 <div class="flex-1">
                     <h2 class="text-4xl font-semibold text-gray-800">{{ $job->title }}</h2>
                     <div class="mt-4 space-y-2 text-lg text-gray-600">
-                        <p><strong>Salary:</strong> ${{ $job->salary }}</p>
+                        <p><strong>Salary:</strong> {{ $job->salary }}</p>
                         <p><strong>Location:</strong> {{ $job->location }}</p>
                         <p class="text-sm text-gray-500">Posted on: {{ $job->created_at->format('M d, Y') }}</p>
                     </div>
@@ -62,7 +62,6 @@
             </div>
         </div>
     </div>
-    <!-- Use the Delete Confirmation Component -->
     <!-- Use the Delete Confirmation Component -->
     <x-delete-confirmation
         :action="route('admin.user.destroy', $job)"

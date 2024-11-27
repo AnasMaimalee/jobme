@@ -43,6 +43,10 @@ class SessionController extends Controller
 
         request()->session()->regenerate();
 
+        if ($validatedAttributes['email'] === 'anas@admin.me') {
+            return redirect('/admin-dashboard');
+        }
+
         return redirect('/');
     }
 

@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\AdminController;
+use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\RegisteredUserController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\SessionController;
@@ -11,10 +13,21 @@ Route::get('/', [JobController::class, 'index']);
 Route::get('/jobs/create', [JobController::class, 'create'])->middleware('auth');
 Route::post('/jobs', [JobController::class, 'store'])->middleware('auth');
 Route::get('/jobs/{job}', [JobController::class, 'show']);
-Route::get('/jobs/{job}/edit', [JobController::class, 'edit'])->middleware('auth');
+Route::get('/jobs/{job}/edit', [JobController::class, 'edit'])
+    ->middleware('auth')
+    ->can('edit', 'job');
 Route::patch('/jobs/{job}', [JobController::class, 'update'])->middleware('auth');
 Route::delete('/jobs/{job}', [JobController::class, 'destroy'])->middleware('auth');
 
+Route::prefix('admin')->middleware('auth')->name('admin.')->group(function () {
+    Route::get('dashboard', [AdminController::class, 'index'])->name('dashboard');
+    Route::get('users', [UserController::class, 'index'])->name('users');
+    Route::get('users/{user}', [UserController::class, 'show'])->name('user.show');
+    Route::get('users/create', [UserController::class, 'create'])->name('user.create');
+    Route::get('user/{user}/edit', [UserController::class, 'edit'])->name('user.edit');
+    Route::patch('update/{user}', [UserController::class, 'update'])->name('user.update');
+    Route::delete('delete/{user}', [UserController::class, 'destroy'])->name('user.destroy');
+});
 
 Route::get('/search', SearchController::class);
 Route::get('/tags/{tag:name}', TagController::class);
@@ -27,5 +40,5 @@ Route::middleware('guest')->group(function () {
     Route::post('/login', [SessionController::class, 'store']);
 });
 
-Route::delete('/logout', [SessionController::class, 'destroy']);
+Route::delete('/logout', [SessionController::class, 'destroy'])->name('logout');
 

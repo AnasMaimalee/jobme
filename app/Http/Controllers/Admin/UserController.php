@@ -51,6 +51,30 @@ class UserController extends Controller
         return redirect()->route('admin.users');
     }
 
+    public function activate(User $user)
+    {
+        // Check if the user is not already active
+        if ($user->status !== 'active') {
+            $user->update(['status' => 'active']);
+        }
+
+        return redirect()->route('admin.users')->with('success', 'User activated successfully!');
+    }
+
+
+    public function deactivate(User $user)
+    {
+        // Ensure you're retrieving the user from the database
+        $user = User::find($user->id);
+
+        // If the status is already inactive, we don't need to update it
+        if ($user && $user->status !== 'inactive') {
+            // Update only the status field
+            $user->update(['status' => 'inactive']);
+        }
+
+        return redirect()->route('admin.users')->with('success', 'User deactivated successfully!');
+    }
     public function destroy(User $user)
     {
         $user->delete();

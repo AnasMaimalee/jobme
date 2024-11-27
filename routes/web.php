@@ -1,7 +1,9 @@
 <?php
+
 use App\Http\Controllers\JobController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\EmployersController;
 use App\Http\Controllers\Admin\JobsController;
 use App\Http\Controllers\RegisteredUserController;
 use App\Http\Controllers\SearchController;
@@ -19,6 +21,8 @@ Route::prefix('admin')->middleware('auth')->name('admin.')->group(function () {
     Route::get('user/{user}/edit', [UserController::class, 'edit'])->name('user.edit');
     Route::patch('update/{user}', [UserController::class, 'update'])->name('user.update');
     Route::delete('delete/{user}', [UserController::class, 'destroy'])->name('user.destroy');
+    Route::post('user/{user/deactivate', [UserController::class, 'deactivate'])->name('user.deactivate');
+    Route::post('user/{user}/activate', [UserController::class, 'activate'])->name('user.activate');
 
     // Admin Jobs
     Route::get('jobs', [JobsController::class, 'index'])->name('jobs'); // Admin job listing
@@ -28,6 +32,15 @@ Route::prefix('admin')->middleware('auth')->name('admin.')->group(function () {
     Route::get('jobs/{job}/edit', [JobsController::class, 'edit'])->name('job.edit'); // Admin edit job
     Route::patch('jobs/{job}', [JobsController::class, 'update'])->name('job.update'); // Admin update job
     Route::delete('jobs/{job}', [JobsController::class, 'destroy'])->name('job.destroy'); // Admin delete job
+
+    //Admin Employer
+    Route::get('/employers', [EmployersController::class, 'index'])->name('employers');
+    Route::get('/employers/create', [EmployersController::class, 'create'])->name('employer.create');
+    Route::post('/employers/create', [EmployersController::class, 'store'])->name('employer.store');
+    Route::get('/employers/{employer}', [EmployersController::class, 'show'])->name('employer.show');
+    Route::get('/employers/{employer}/edit', [EmployersController::class, 'edit'])->name('employer.edit');
+    Route::patch('/employers/{employer}', [EmployersController::class, 'update'])->name('employer.update');
+    Route::delete('/employers/{employer}', [EmployersController::class, 'destroy'])->name('employer.destroy');
 });
 
 // Public Routes

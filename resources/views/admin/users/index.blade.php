@@ -47,20 +47,28 @@
                                 <!-- Dropdown Menu -->
                                 <div class="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none hidden" id="dropdown-{{ $user->id }}">
                                     <div class="py-1">
-                                        <a href="{{ route('admin.user.show', $user) }}" class="text-gray-700 block px-4 py-2 text-sm hover:bg-gray-100">View</a>
-                                        <a href="{{ route('admin.user.edit', $user) }}" class="text-gray-700 block px-4 py-2 text-sm hover:bg-gray-100">Edit</a>
-                                        <div type="button" onclick="openModal({{ $user->id }})" class="text-red-600 block px-4 py-2 text-sm hover:bg-gray-100">Delete</div>
+                                        <a href="{{ route('admin.user.show', $user) }}" class="text-gray-700 block px-4 py-2 text-sm hover:bg-gray-100 hover:cursor-pointer">View</a>
+                                        <a href="{{ route('admin.user.edit', $user) }}" class="text-gray-700 block px-4 py-2 text-sm hover:bg-gray-100 hover:cursor-pointer">Edit</a>
+                                        <div type="button" onclick="openDeleteModal({{ $user->id }})" class="text-red-600 block px-4 py-2 text-sm hover:bg-gray-100 hover:cursor-pointer">Delete</div>
+
                                         <!-- Add Activate/Deactivate Links -->
                                         @if ($user->status === 'active')
-                                            <a href="" class="text-red-500 block px-4 py-2 text-sm hover:bg-gray-100">Deactivate</a>
+                                            <button type="button" onclick="openActivateDeactivateModal({{ $user->id }}, 'deactivate')" class="text-red-500 block px-4 py-2 text-sm hover:bg-gray-100">Deactivate</button>
                                         @else
-                                            <a href="" class="text-green-500 block px-4 py-2 text-sm hover:bg-gray-100">Activate</a>
+                                            <button type="button" onclick="openActivateDeactivateModal({{ $user->id }}, 'activate')" class="text-green-500 block px-4 py-2 text-sm hover:bg-gray-100">Activate</button>
                                         @endif
                                     </div>
                                 </div>
                             </div>
                         </td>
                     </tr>
+
+                    <!-- Add Activate/Deactivate Confirmation Modal -->
+                    <x-activate-deactivate-confirmation
+                        :action="($user->status === 'active' ? route('admin.user.deactivate', $user) : route('admin.user.activate', $user))"
+                        :user="$user"
+                        actionType="{{ $user->status === 'active' ? 'deactivate' : 'activate' }}"
+                    />
                 @endforeach
                 </tbody>
             </table>
@@ -115,4 +123,27 @@
             });
         }
     });
+
+    // Open the delete confirmation modal
+    function openDeleteModal(userId) {
+        document.getElementById('delete-modal-' + userId).classList.remove('hidden');
+    }
+
+    // Open the activate/deactivate confirmation modal
+    function openActivateDeactivateModal(userId, actionType) {
+        document.getElementById('activate-deactivate-modal-' + userId).classList.remove('hidden');
+        // Optionally set the action type (activate/deactivate) in the modal if needed
+        const modal = document.getElementById('activate-deactivate-modal-' + userId);
+        modal.querySelector('.action-type').textContent = actionType;
+    }
+
+    // Close the delete modal
+    function closeDeleteModal(userId) {
+        document.getElementById('delete-modal-' + userId).classList.add('hidden');
+    }
+
+    // Close the activate/deactivate modal
+    function closeActivateDeactivateModal(userId) {
+        document.getElementById('activate-deactivate-modal-' + userId).classList.add('hidden');
+    }
 </script>

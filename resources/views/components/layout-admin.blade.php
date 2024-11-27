@@ -25,8 +25,8 @@
         <ul>
             <li class="mb-4"><a href="{{ route('admin.dashboard') }}" class="hover:bg-gray-700 px-4 py-2 rounded block">Dashboard</a></li>
             <li class="mb-4"><a href="{{ route('admin.users') }}" class="hover:bg-gray-700 px-4 py-2 rounded block">Users</a></li>
+            <li class="mb-4"><a href="{{ route('admin.jobs') }}" class="hover:bg-gray-700 px-4 py-2 rounded block">Jobs</a></li>
             <li class="mb-4"><a href="#" class="hover:bg-gray-700 px-4 py-2 rounded block">Employers</a></li>
-            <li class="mb-4"><a href="#" class="hover:bg-gray-700 px-4 py-2 rounded block">Jobs</a></li>
             <li class="mb-4"><a href="#" class="hover:bg-gray-700 px-4 py-2 rounded block">Reports</a></li>
             <li class="mb-4"><a href="#" class="hover:bg-gray-700 px-4 py-2 rounded block">Settings</a></li>
             @auth

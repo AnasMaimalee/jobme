@@ -22,11 +22,19 @@ class UserController extends Controller
 
     public function store(Request $request)
     {
+        $attributes = $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'password' => ['required', 'string', 'min:8', 'confirmed'],
+        ]);
 
+        User::create($attributes);
+        session()->flash('success', 'User has been created successfully.');
+        return redirect()->route('admin.users');
     }
-    public function show($id)
+    public function show(User $user)
     {
-
+       return view('admin.users.show', ['user' => $user]);
     }
     public function edit(User $user)
     {
@@ -34,11 +42,20 @@ class UserController extends Controller
     }
     public function update(Request $request, User $user)
     {
-
+        $attributes = $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'password' => ['required', 'string', 'min:8', 'confirmed'],
+        ]);
+        $user->update($attributes);
+        return redirect()->route('admin.users');
     }
 
     public function destroy(User $user)
     {
-
+        $user->delete();
+        // Flash a success message to the session
+        session()->flash('success', 'User has been deleted successfully.');
+        return redirect()->route('admin.users');
     }
 }

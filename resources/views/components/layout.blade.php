@@ -29,7 +29,7 @@
             @auth
 
                     <div class="space-x-5 flex items-center">
-                        <a href="/jobs/create">Post Job</a>
+                        <a href="{{ route('jobs.create') }}">Post Job</a>
                         <form method="POST" action="/logout">
                             @csrf
                             @method('DELETE')

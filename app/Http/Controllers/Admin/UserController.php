@@ -41,7 +41,6 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        // Validate the user and employer data
         $validatedAttributes = $request->validate([
             'name' => 'required|string|max:255',
             'email' => ['required', 'email', 'max:255', 'unique:users,email'],
@@ -53,10 +52,8 @@ class UserController extends Controller
             'logo' => ['required', File::types(['png', 'jpg', 'jpeg', 'webp'])],
         ]);
 
-        // Call the UserService to create the user
         $this->userService->createUser($validatedAttributes, $employerAttributes, $request);
 
-        // Redirect back with a success message
         return redirect()->route('admin.users')
             ->with('success', 'User created successfully.');
     }
@@ -82,23 +79,19 @@ class UserController extends Controller
      */
     public function update(Request $request, User $user)
     {
-        // Validate the user data (name, email, password)
         $validatedAttributes = $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email,' . $user->id],
             'password' => ['nullable', 'string', 'min:6', 'confirmed'], // Only validate if the password is provided
         ]);
 
-        // Validate employer-specific data (like employer name and logo)
         $employerAttributes = $request->validate([
-            'employer' => ['required', 'string', 'max:255'],
+            'name' => ['required', 'string', 'max:255'],
             'logo' => ['nullable', 'file', 'mimes:png,jpg,jpeg,webp'], // Allow logo to be optional, but validate if it exists
         ]);
 
-        // Call the UserService to update the user and employer data
         $this->userService->updateUser($user, $validatedAttributes, $employerAttributes, $request);
 
-        // Redirect back with a success message
         return redirect()->route('admin.users')
             ->with('success', 'User has been updated successfully.');
     }
@@ -121,10 +114,7 @@ class UserController extends Controller
      */
     public function deactivate(User $user)
     {
-        // Use the UserService to deactivate the user
         $this->userService->deactivateUser($user);
-
-        // Redirect with success message
         return redirect()->route('admin.users')
             ->with('success', 'User deactivated successfully!');
     }

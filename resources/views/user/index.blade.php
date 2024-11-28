@@ -3,6 +3,9 @@
 @endphp
 
 <x-layout>
+    @foreach($jobs as $job)
+        {{ $job->title }}
+    @endforeach
     <div class="max-w-4xl mx-auto p-8 bg-gray-800 rounded-lg shadow-lg">
         <h2 class="text-2xl font-bold text-white mb-6">Welcome, {{ $user->name }}</h2>
 

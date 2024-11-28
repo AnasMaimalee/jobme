@@ -44,7 +44,12 @@
                 <button type="button" onclick="openModal('{{ route('admin.user.destroy', $user) }}')" class="bg-red-500 text-white py-2 px-4 rounded-lg hover:bg-red-600">Delete</button>
             </div>
         </div>
+
+        <div class="text-lg text-gray-600">
+            <a href="{{ route('single-user-job', $user) }}" class="mt-4 text-blue-500 hover:text-blue-700 text-lg">View All Jobs</a>
+        </div>
     </div>
+
 
     <!-- Use the Delete Confirmation Component -->
     <x-delete-confirmation

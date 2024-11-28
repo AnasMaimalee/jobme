@@ -3,6 +3,7 @@
 use App\Http\Controllers\JobController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\User\UserJobController;
 use App\Http\Controllers\Admin\EmployersController;
 use App\Http\Controllers\Admin\JobsController;
 use App\Http\Controllers\User\ProfileController;
@@ -44,6 +45,9 @@ Route::prefix('admin')->middleware('auth')->name('admin.')->group(function () {
     Route::delete('/employers/{employer}', [EmployersController::class, 'destroy'])->name('employer.destroy');
 });
 
+// User Route
+Route::get('/user-job', [UserJobController::class, 'index'])->name('user-job');
+Route::get('/user-job/{user}', [UserJobController::class, 'singleUserJob'])->name('single-user-job');
 
 // Public Routes
 Route::get('/', [JobController::class, 'index']); // Public job listing

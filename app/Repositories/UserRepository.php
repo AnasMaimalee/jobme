@@ -6,39 +6,59 @@ use App\Models\User;
 
 class UserRepository
 {
-    // Get all users (pagination or any other method)
+    /**
+     * @return mixed
+     */
     public function getAllUsers()
     {
         return User::paginate(10);
     }
 
-    // Create a new user
+    /**
+     * @param array $attributes
+     * @return mixed
+     */
     public function create(array $attributes)
     {
         return User::create($attributes);
     }
 
-    // Update an existing user
+    /**
+     * @param User $user
+     * @param array $attributes
+     * @return bool
+     */
     public function update(User $user, array $attributes)
     {
         return $user->update($attributes);
     }
 
-    // Delete a user
+    /**
+     * @param User $user
+     * @return bool|null
+     */
     public function delete(User $user)
     {
         return $user->delete();
     }
 
+    /**
+     * @param User $user
+     * @param array $employerAttributes
+     * @return \Illuminate\Database\Eloquent\Model
+     */
     public function createEmployer(User $user, array $employerAttributes)
     {
         return $user->employer()->create($employerAttributes);
     }
 
-    // Update employer details for a user
+    /**
+     * @param User $user
+     * @param array $employerAttributes
+     * @return int
+     */
     public function updateEmployer(User $user, array $employerAttributes)
     {
-        // Assuming Employer is a related model
         return $user->employer()->update($employerAttributes);
     }
 }

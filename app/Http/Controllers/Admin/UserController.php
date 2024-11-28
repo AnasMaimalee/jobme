@@ -116,8 +116,7 @@ class UserController extends Controller
     }
     public function destroy(User $user)
     {
-        $user->delete();
-        $user->employer()->delete();
+       $this->userService->deleteUser($user);
         // Flash a success message to the session
         session()->flash('success', 'User has been deleted successfully.');
         return redirect()->route('admin.users');

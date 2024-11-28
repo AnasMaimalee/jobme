@@ -1,94 +1,81 @@
 <?php
-
 namespace App\Services;
 
-use App\Models\User;
-use App\Models\Employer;
+use App\Repositories\UserRepository;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Storage;
+use Illuminate\Http\Request;
+use App\Models\User;
 
 class UserService
 {
-    /**
-     * Create a new user and associated employer.
-     *
-     * @param array $validatedUserData
-     * @param array $validatedEmployerData
-     * @param \Illuminate\Http\Request $request
-     * @return \App\Models\User
-     */
-    public function createUser(array $validatedUserData, array $validatedEmployerData, $request)
+    protected $userRepository;
+
+// Inject UserRepository into the service
+    public function __construct(UserRepository $userRepository)
     {
-        // Create the user
-        $user = User::create([
-            'name' => $validatedUserData['name'],
-            'email' => $validatedUserData['email'],
-            'password' => Hash::make($validatedUserData['password']),
-            'status' => 'inactive', // Default status for new users
-        ]);
+        $this->userRepository = $userRepository;
+    }
 
-        // Store the employer logo and create the employer record
-        $logoPath = $request->file('logo')->store('logos', 'public'); // Store logo in 'public/logos'
+// Get users (pagination handled here)
+    public function getUsers()
+    {
+        return $this->userRepository->getAllUsers();
+    }
 
-        // Create associated employer
-        $user->employer()->create([
-            'name' => $validatedEmployerData['employer'],
-            'logo' => $logoPath,
-        ]);
+// Create a new user
+    public function createUser(array $validatedAttributes, array $employerAttributes, Request $request)
+    {
+        $validatedAttributes['password'] = Hash::make($validatedAttributes['password']);
+
+        $user = $this->userRepository->create($validatedAttributes);
+
+        $this->userRepository->createEmployer($user, $employerAttributes);
 
         return $user;
     }
 
-    /**
-     * Update user details.
-     *
-     * @param \App\Models\User $user
-     * @param array $validatedUserData
-     * @param array $validatedEmployerData
-     * @param \Illuminate\Http\Request $request
-     * @return \App\Models\User
-     */
-    public function updateUser(User $user, array $validatedUserData, array $validatedEmployerData, $request)
+// Update an existing user
+    public function updateUser(User $user, array $validatedAttributes, array $employerAttributes, Request $request)
     {
-        // Update user details
-        $user->update([
-            'name' => $validatedUserData['name'],
-            'email' => $validatedUserData['email'],
-            'password' => $validatedUserData['password'] ? Hash::make($validatedUserData['password']) : $user->password,
-        ]);
-
-        // Update employer details if provided
-        if ($request->has('employer')) {
-            $user->employer->update([
-                'name' => $validatedEmployerData['employer'],
-            ]);
+// If password is provided, hash it before updating
+        if (!empty($validatedAttributes['password'])) {
+            $validatedAttributes['password'] = Hash::make($validatedAttributes['password']);
         }
 
-        // Update logo if new file is provided
+// Handle logo file upload if present
         if ($request->hasFile('logo')) {
-            $logoPath = $request->file('logo')->store('logos', 'public');
-            $user->employer->update([
-                'logo' => $logoPath,
-            ]);
+            $validatedAttributes['logo'] = $request->file('logo')->store('logos');
         }
 
-        return $user;
+// Update the user using the repository
+        $this->userRepository->update($user, $validatedAttributes);
+
+// Update employer information
+        $this->userRepository->updateEmployer($user, $employerAttributes);
     }
 
-    /**
-     * Delete a user and associated employer.
-     *
-     * @param \App\Models\User $user
-     * @return bool|null
-     */
+// Activate a user
+    public function activateUser(User $user)
+    {
+        if ($user->status !== 'active') {
+            $user->update(['status' => 'active']);
+        }
+    }
+
+// Deactivate a user
+    public function deactivateUser(User $user)
+    {
+        if ($user->status !== 'inactive') {
+            $user->update(['status' => 'inactive']);
+        }
+    }
+
+// Delete a user
     public function deleteUser(User $user)
     {
-        // You can optionally delete the user's employer logo or handle any other clean-up
-        if ($user->employer && $user->employer->logo) {
-            Storage::delete($user->employer->logo); // Delete the logo from storage
-        }
+        $this->userRepository->delete($user);
 
-        // Delete the user and associated employer record
-        return $user->delete();
+// Optionally delete related employer data if necessary
+        $user->employer()->delete();
     }
 }

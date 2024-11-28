@@ -43,7 +43,7 @@
                                     <div class="py-1">
                                         <a href="{{ route('admin.employer.show', $employer) }}" class="text-gray-700 block px-4 py-2 text-sm hover:bg-gray-100 hover:cursor-pointer">View</a>
                                         <a href="{{ route('admin.employer.edit', $employer) }}" class="text-gray-700 block px-4 py-2 text-sm hover:bg-gray-100 hover:cursor-pointer">Edit</a>
-                                        <div type="button" onclick="openDeleteModal({{ $employer->id }})" class="text-red-600 block px-4 py-2 text-sm hover:bg-gray-100 hover:cursor-pointer">Delete</div>
+{{--                                        <div type="button" onclick="openDeleteModal({{ $employer->id }})" class="text-red-600 block px-4 py-2 text-sm hover:bg-gray-100 hover:cursor-pointer">Delete</div>--}}
                                     </div>
                                 </div>
                             </div>

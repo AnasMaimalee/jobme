@@ -1,13 +1,22 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\Services\UserService;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rules\File;
 
+
 class RegisteredUserController extends Controller
 {
+    protected $userService;
+
+    public function __construct(UserService $userService)
+    {
+        $this->userService = $userService;
+    }
+
     /**
      * Display a listing of the resource.
      */
@@ -29,26 +38,26 @@ class RegisteredUserController extends Controller
      */
     public function store(Request $request)
     {
+        // Validate user and employer data
         $validatedAttributes = $request->validate([
-            'name' => 'required',
+            'name' => 'required|string|max:255',
             'email' => ['required', 'email', 'max:255', 'unique:users,email'],
             'password' => ['required', 'min:6', 'confirmed'],
         ]);
 
         $employerAttributes = $request->validate([
-            'employer' => 'required',
+            'employer' => 'required|string|max:255',
             'logo' => ['required', File::types(['png', 'jpg', 'jpeg', 'webp'])],
         ]);
-        $user = User::create($validatedAttributes);
-        $logoPath = $request->logo->store('logos');
 
-        $user->employer()->create([
-            'name' => $employerAttributes['employer'],
-            'logo' => $logoPath,
-        ]);
+        // Use the UserService to create the user
+        $user = $this->userService->createUser($validatedAttributes, $employerAttributes, $request);
+
+        // Log the user in after registration
         Auth::login($user);
 
         return redirect('/');
+
     }
 
     /**

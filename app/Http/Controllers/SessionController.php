@@ -30,25 +30,43 @@ class SessionController extends Controller
      */
     public function store()
     {
+        // Validate the email and password
         $validatedAttributes = request()->validate([
             'email' => ['required', 'email'],
             'password' => ['required'],
         ]);
 
+        // Attempt to authenticate the user
         if (!Auth::attempt($validatedAttributes)) {
             throw ValidationException::withMessages([
                 'email' => 'Sorry, Invalid Credentials.'
             ]);
-        };
+        }
 
+        // Regenerate the session to prevent session fixation attacks
         request()->session()->regenerate();
 
-        if ($validatedAttributes['email'] === 'anas@admin.me') {
+        // Get the authenticated user
+        $user = Auth::user();
+
+        // Check if the user status is 'active'
+        if ($user->status !== 'active') {
+            // If the user is not active, log them out and show an error message
+            Auth::logout();
+            throw ValidationException::withMessages([
+                'email' => 'Your account is ' . $user->status . '. Please contact support or check your account status.'
+            ]);
+        }
+
+        // If the user is the admin
+        if ($user->email === 'anas@admin.me') {
             return redirect('/admin/dashboard');
         }
 
+        // Redirect the user to the homepage if everything is fine
         return redirect('/');
     }
+
 
 
 

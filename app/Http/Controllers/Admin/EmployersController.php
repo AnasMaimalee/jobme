@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Employer;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 
 class EmployersController extends Controller
@@ -39,9 +40,16 @@ class EmployersController extends Controller
 
     }
 
-    public function destroy(Employer $employer)
+    /**
+     * @param Employer $employer
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function destroy(Employer $employer): RedirectResponse
     {
         $employer->delete();
-        return redirect()->route('admin.employers')->with('success', 'Employer deleted successfully');
+        $employer->user()->delete();
+        $employer->jobs()->delete();
+        return redirect()->route('admin.employers')
+            ->with('success', 'Employer deleted successfully');
     }
 }

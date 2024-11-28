@@ -5,6 +5,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\EmployersController;
 use App\Http\Controllers\Admin\JobsController;
+use App\Http\Controllers\User\ProfileController;
 use App\Http\Controllers\RegisteredUserController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\SessionController;
@@ -21,8 +22,8 @@ Route::prefix('admin')->middleware('auth')->name('admin.')->group(function () {
     Route::get('user/{user}/edit', [UserController::class, 'edit'])->name('user.edit');
     Route::patch('update/{user}', [UserController::class, 'update'])->name('user.update');
     Route::delete('delete/{user}', [UserController::class, 'destroy'])->name('user.destroy');
-    Route::post('user/{user/deactivate', [UserController::class, 'deactivate'])->name('user.deactivate');
-    Route::post('user/{user}/activate', [UserController::class, 'activate'])->name('user.activate');
+    Route::patch('user/{user}/deactivate', [UserController::class, 'deactivate'])->name('user.deactivate');
+    Route::patch('user/{user}/activate', [UserController::class, 'activate'])->name('user.activate');
 
     // Admin Jobs
     Route::get('jobs', [JobsController::class, 'index'])->name('jobs'); // Admin job listing
@@ -43,6 +44,7 @@ Route::prefix('admin')->middleware('auth')->name('admin.')->group(function () {
     Route::delete('/employers/{employer}', [EmployersController::class, 'destroy'])->name('employer.destroy');
 });
 
+
 // Public Routes
 Route::get('/', [JobController::class, 'index']); // Public job listing
 Route::get('/jobs/{job}', [JobController::class, 'show']); // Public job details
@@ -54,13 +56,21 @@ Route::get('/jobs/{job}/edit', [JobController::class, 'edit'])
 Route::patch('/jobs/{job}', [JobController::class, 'update'])->middleware('auth'); // Update job (auth required)
 Route::delete('/jobs/{job}', [JobController::class, 'destroy'])->middleware('auth'); // Delete job (auth required)
 
+Route::prefix('profile')->middleware('auth')->name('profile.')->group(function () {
+    Route::get('dashboard', [ProfileController::class, 'index'])->name('dashboard');
+    Route::get('edit/{user}', [ProfileController::class, 'edit'])->name('edit');
+    ROute::get('password/{user}', [ProfileController::class, 'password'])->name('password');
+    Route::patch('update/{user}', [ProfileController::class, 'update'])->name('update');
+    Route::delete('delete/{user}', [ProfileController::class, 'destroy'])->name('destroy');
+});
+
 // Search and Tag Routes
 Route::get('/search', SearchController::class);
 Route::get('/tags/{tag:name}', TagController::class);
 
 // Authentication Routes (Guest Only)
 Route::middleware('guest')->group(function () {
-    Route::get('/register', [RegisteredUserController::class, 'create']);
+    Route::get('/register', [RegisteredUserController::class, 'create'])->name('register');
     Route::post('/register', [RegisteredUserController::class, 'store']);
     Route::get('/login', [SessionController::class, 'create'])->name('login');
     Route::post('/login', [SessionController::class, 'store']);

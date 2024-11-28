@@ -12,44 +12,109 @@
 
                 <!-- Name Input -->
                 <div class="mb-4">
-                    <label for="name" class="block text-sm font-semibold text-gray-700">Name</label>
-                    <input type="text" id="name" name="name" value="{{ old('name') }}" class="w-full mt-1 p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter your name">
+                    <label for="name" class="block text-sm font-medium text-gray-700">Name</label>
+                    <input
+                        type="text"
+                        name="name"
+                        id="name"
+                        class="mt-1 p-3 w-full border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                        placeholder="Enter your name"
+                        value="{{ old('name') }}"
+                        required
+                    >
                     @error('name')
-                    <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                    <div class="text-red-500 text-xs mt-1">{{ $message }}</div>
                     @enderror
                 </div>
 
                 <!-- Email Input -->
                 <div class="mb-4">
-                    <label for="email" class="block text-sm font-semibold text-gray-700">Email</label>
-                    <input type="email" id="email" name="email" value="{{ old('email') }}" class="w-full mt-1 p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter your email">
+                    <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
+                    <input
+                        type="email"
+                        name="email"
+                        id="email"
+                        class="mt-1 p-3 w-full border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                        placeholder="Enter your email"
+                        value="{{ old('email') }}"
+                        required
+                    >
                     @error('email')
-                    <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                    <div class="text-red-500 text-xs mt-1">{{ $message }}</div>
                     @enderror
                 </div>
 
                 <!-- Password Input -->
                 <div class="mb-4">
-                    <label for="password" class="block text-sm font-semibold text-gray-700">Password</label>
-                    <input type="password" id="password" name="password" class="w-full mt-1 p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter your password">
+                    <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
+                    <input
+                        type="password"
+                        name="password"
+                        id="password"
+                        class="mt-1 p-3 w-full border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                        placeholder="Enter your password"
+                        required
+                    >
                     @error('password')
-                    <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                    <div class="text-red-500 text-xs mt-1">{{ $message }}</div>
                     @enderror
                 </div>
 
-                <!-- Confirm Password Input -->
-                <div class="mb-4">
-                    <label for="password_confirmation" class="block text-sm font-semibold text-gray-700">Confirm Password</label>
-                    <input type="password" id="password_confirmation" name="password_confirmation" class="w-full mt-1 p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Confirm your password">
+                <!-- Password Confirmation Input -->
+                <div class="mb-6">
+                    <label for="password_confirmation" class="block text-sm font-medium text-gray-700">Confirm Password</label>
+                    <input
+                        type="password"
+                        name="password_confirmation"
+                        id="password_confirmation"
+                        class="mt-1 p-3 w-full border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                        placeholder="Confirm your password"
+                        required
+                    >
                     @error('password_confirmation')
-                    <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                    <div class="text-red-500 text-xs mt-1">{{ $message }}</div>
+                    @enderror
+                </div>
+
+                <div class="border border-b border-gray-100 my-4">
+
+                </div>
+
+                <!-- Employer Name Input -->
+                <div class="mb-4">
+                    <label for="employer" class="block text-sm font-medium text-gray-700">Employer Name</label>
+                    <input
+                        type="text"
+                        name="employer"
+                        id="employer"
+                        class="mt-1 p-3 w-full border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                        placeholder="Enter your employer name"
+                        value="{{ old('employer') }}"
+                        required
+                    >
+                    @error('employer')
+                    <div class="text-red-500 text-xs mt-1">{{ $message }}</div>
+                    @enderror
+                </div>
+
+                <!-- Employer Logo Input -->
+                <div class="mb-6">
+                    <label for="logo" class="block text-sm font-medium text-gray-700">Employer Logo</label>
+                    <input
+                        type="file"
+                        name="logo"
+                        id="logo"
+                        class="mt-1 p-3 w-full border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                    >
+                    @error('logo')
+                    <div class="text-red-500 text-xs mt-1">{{ $message }}</div>
                     @enderror
                 </div>
 
                 <!-- Submit Button -->
-                <div class="mt-6">
-                    <button type="submit" class="w-full bg-gray-800 text-white py-3 px-4 rounded-lg hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500">Register</button>
-                </div>
+                <button type="submit" class="w-full bg-indigo-600 text-white py-3 rounded-md text-lg hover:bg-indigo-700 transition duration-200">
+                    Register
+                </button>
             </form>
         </div>
     </div>

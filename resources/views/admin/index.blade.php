@@ -41,19 +41,21 @@
             </a>
 
             <!-- Jobs Posted Card -->
-            <div class="bg-white p-6 rounded-lg shadow-lg flex items-center justify-between">
-                <div class="flex items-center">
-                    <div class="bg-yellow-500 text-white p-4 rounded-full mr-4">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7h18M3 11h18M3 15h18M3 19h18"></path>
-                        </svg>
-                    </div>
-                    <div>
-                        <h3 class="text-lg font-medium">Total Jobs Posted</h3>
-                        <p class="text-2xl font-bold">{{ $totalJobPosted }}</p>
+            <a href="{{ route('admin.employers') }}">
+                <div class="bg-white p-6 rounded-lg shadow-lg flex items-center justify-between">
+                    <div class="flex items-center">
+                        <div class="bg-yellow-500 text-white p-4 rounded-full mr-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7h18M3 11h18M3 15h18M3 19h18"></path>
+                            </svg>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-medium">Total Jobs Posted</h3>
+                            <p class="text-2xl font-bold">{{ $totalJobPosted }}</p>
+                        </div>
                     </div>
                 </div>
-            </div>
+            </a>
         </div>
 
         <!-- Additional Content Section (optional) -->

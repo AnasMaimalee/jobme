@@ -49,7 +49,7 @@
                                     <div class="py-1">
                                         <a href="{{ route('admin.user.show', $user) }}" class="text-gray-700 block px-4 py-2 text-sm hover:bg-gray-100 hover:cursor-pointer">View</a>
                                         <a href="{{ route('admin.user.edit', $user) }}" class="text-gray-700 block px-4 py-2 text-sm hover:bg-gray-100 hover:cursor-pointer">Edit</a>
-                                        <div type="button" onclick="openDeleteModal({{ $user->id }})" class="text-red-600 block px-4 py-2 text-sm hover:bg-gray-100 hover:cursor-pointer">Delete</div>
+{{--                                        <div type="button" onclick="openDeleteModal({{ $user->id }})" class="text-red-600 block px-4 py-2 text-sm hover:bg-gray-100 hover:cursor-pointer">Delete</div>--}}
 
                                         <!-- Add Activate/Deactivate Links -->
                                         @if ($user->status === 'active')
@@ -64,11 +64,21 @@
                     </tr>
 
                     <!-- Add Activate/Deactivate Confirmation Modal -->
-                    <x-activate-deactivate-confirmation
-                        :action="($user->status === 'active' ? route('admin.user.deactivate', $user) : route('admin.user.activate', $user))"
-                        :user="$user"
-                        actionType="{{ $user->status === 'active' ? 'deactivate' : 'activate' }}"
-                    />
+                    <!-- Inline Modal for Activation/Deactivation -->
+                    <div class="fixed inset-0 z-50 flex items-center justify-center hidden" id="activate-deactivate-modal-{{ $user->id }}">
+                        <div class="bg-white p-6 rounded-lg shadow-lg">
+                            <h3 class="text-xl font-semibold mb-4">Confirm {{ $user->status === 'active' ? 'Deactivation' : 'Activation' }}</h3>
+                            <p>Are you sure you want to {{ $user->status === 'active' ? 'deactivate' : 'activate' }} this user?</p>
+                            <div class="mt-4 flex justify-end">
+                                <form action="{{ $user->status === 'active' ? route('admin.user.deactivate', $user) : route('admin.user.activate', $user) }}" method="POST">
+                                    @csrf
+                                    @method('PATCH')
+                                    <button type="submit" class="bg-red-500 text-white px-4 py-2 rounded-md">Yes, {{ $user->status === 'active' ? 'Deactivate' : 'Activate' }}</button>
+                                </form>
+                                <button type="button" onclick="closeActivateDeactivateModal({{ $user->id }})" class="ml-3 bg-gray-500 text-white px-4 py-2 rounded-md">Cancel</button>
+                            </div>
+                        </div>
+                    </div>
                 @endforeach
                 </tbody>
             </table>
@@ -91,7 +101,7 @@
     @endforeach
 </x-layout-admin>
 
-<!-- Add a little JavaScript to handle dropdown toggle -->
+<!-- JavaScript to handle dropdown toggle and modal show/hide -->
 <script>
     // Function to toggle dropdown visibility
     document.querySelectorAll('[id^="options-menu-"]').forEach(button => {
@@ -132,18 +142,15 @@
     // Open the activate/deactivate confirmation modal
     function openActivateDeactivateModal(userId, actionType) {
         document.getElementById('activate-deactivate-modal-' + userId).classList.remove('hidden');
-        // Optionally set the action type (activate/deactivate) in the modal if needed
-        const modal = document.getElementById('activate-deactivate-modal-' + userId);
-        modal.querySelector('.action-type').textContent = actionType;
-    }
-
-    // Close the delete modal
-    function closeDeleteModal(userId) {
-        document.getElementById('delete-modal-' + userId).classList.add('hidden');
     }
 
     // Close the activate/deactivate modal
     function closeActivateDeactivateModal(userId) {
         document.getElementById('activate-deactivate-modal-' + userId).classList.add('hidden');
+    }
+
+    // Close the delete modal
+    function closeDeleteModal(userId) {
+        document.getElementById('delete-modal-' + userId).classList.add('hidden');
     }
 </script>

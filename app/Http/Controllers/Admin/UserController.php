@@ -4,11 +4,20 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Services\UserService;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rules\File;
 
 class UserController extends Controller
 {
 
+    protected $userService;
+
+    public function __construct(UserService $userService)
+    {
+        $this->userService = $userService;
+    }
     public function index()
     {
         $users = User::paginate(10);
@@ -22,15 +31,24 @@ class UserController extends Controller
 
     public function store(Request $request)
     {
-        $attributes = $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'password' => ['required', 'string', 'min:8', 'confirmed'],
+        // Validate user and employer data
+        $validatedAttributes = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => ['required', 'email', 'max:255', 'unique:users,email'],
+            'password' => ['required', 'min:6', 'confirmed'],
         ]);
 
-        User::create($attributes);
-        session()->flash('success', 'User has been created successfully.');
-        return redirect()->route('admin.users');
+        $employerAttributes = $request->validate([
+            'employer' => 'required|string|max:255',
+            'logo' => ['required', File::types(['png', 'jpg', 'jpeg', 'webp'])],
+        ]);
+
+        // Use the UserService to create the user
+        $user = $this->userService->createUser($validatedAttributes, $employerAttributes, $request);
+
+
+        return redirect()->route('admin.users')
+            ->with('success', 'User created successfully.');
     }
     public function show(User $user)
     {
@@ -44,15 +62,26 @@ class UserController extends Controller
     {
         $attributes = $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'password' => ['required', 'string', 'min:8', 'confirmed'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email,' . $user->id],
+            'password' => ['nullable', 'string', 'min:4', 'confirmed'], // Only validate if the password is provided
         ]);
+
+        // Update the user's attributes
         $user->update($attributes);
-        return redirect()->route('admin.users');
+
+        // Redirect back to the users list or another page
+        return redirect()->route('admin.users')
+            ->with('success', 'User has been updated successfully.');
     }
 
-    public function activate(User $user)
+
+    /**
+     * @param User $user
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function activate(User $user): RedirectResponse
     {
+
         // Check if the user is not already active
         if ($user->status !== 'active') {
             $user->update(['status' => 'active']);
@@ -78,6 +107,7 @@ class UserController extends Controller
     public function destroy(User $user)
     {
         $user->delete();
+        $user->employer()->delete();
         // Flash a success message to the session
         session()->flash('success', 'User has been deleted successfully.');
         return redirect()->route('admin.users');

@@ -17,7 +17,7 @@
 
         <!-- Edit Form -->
         <div class="bg-white p-6 rounded-lg shadow-lg w-1/2">
-            <form action="{{ route('admin.user.update', $user) }}" method="POST">
+            <form action="{{ route('admin.user.update', $user) }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 @method('PATCH') <!-- Method Spoofing for PUT request -->
 
@@ -53,6 +53,24 @@
                     <label for="password_confirmation" class="block text-sm font-semibold text-gray-700">Confirm Password</label>
                     <input type="password" id="password_confirmation" name="password_confirmation" class="w-full mt-1 p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Confirm your password">
                     @error('password_confirmation')
+                    <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <!-- Employer Name Input -->
+                <div class="mb-4">
+                    <label for="employer" class="block text-sm font-semibold text-gray-700">Employer Name</label>
+                    <input type="text" id="employer" name="employer" value="{{ old('employer', $user->employer->name ?? '') }}" class="w-full mt-1 p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter employer name">
+                    @error('employer')
+                    <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <!-- Employer Logo Input -->
+                <div class="mb-4">
+                    <label for="logo" class="block text-sm font-semibold text-gray-700">Logo</label>
+                    <input type="file" id="logo" name="logo" class="w-full mt-1 p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    @error('logo')
                     <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                     @enderror
                 </div>

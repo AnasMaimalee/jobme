@@ -44,8 +44,7 @@ class UserController extends Controller
         ]);
 
         // Use the UserService to create the user
-        $user = $this->userService->createUser($validatedAttributes, $employerAttributes, $request);
-
+        $this->userService->createUser($validatedAttributes, $employerAttributes, $request);
 
         return redirect()->route('admin.users')
             ->with('success', 'User created successfully.');
@@ -58,21 +57,32 @@ class UserController extends Controller
     {
         return view('admin.users.edit', ['user' => $user]);
     }
+    /**
+     * Update the specified resource in storage.
+     */
     public function update(Request $request, User $user)
     {
-        $attributes = $request->validate([
+        // Validate user data (name, email, password)
+        $validatedAttributes = $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email,' . $user->id],
             'password' => ['nullable', 'string', 'min:4', 'confirmed'], // Only validate if the password is provided
         ]);
 
-        // Update the user's attributes
-        $user->update($attributes);
+        // Validate employer-specific data (like employer name and logo)
+        $employerAttributes = $request->validate([
+            'employer' => ['required', 'string', 'max:255'],
+            'logo' => ['nullable', 'file', 'mimes:png,jpg,jpeg,webp'], // Allow logo to be optional, but validate if it exists
+        ]);
 
-        // Redirect back to the users list or another page
+        // Call the UserService to update the user and employer data
+        $this->userService->updateUser($user, $validatedAttributes, $employerAttributes, $request);
+
+        // Redirect back with success message
         return redirect()->route('admin.users')
             ->with('success', 'User has been updated successfully.');
     }
+
 
 
     /**

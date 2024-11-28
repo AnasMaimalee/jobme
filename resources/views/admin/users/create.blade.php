@@ -7,7 +7,7 @@
 
         <!-- Registration Form -->
         <div class="bg-white p-6 rounded-lg shadow-lg w-1/2">
-            <form action="{{ route('admin.user.store') }}" method="POST">
+            <form action="{{ route('admin.user.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
 
                 <!-- Name Input -->
@@ -97,7 +97,6 @@
                     @enderror
                 </div>
 
-                <!-- Employer Logo Input -->
                 <div class="mb-6">
                     <label for="logo" class="block text-sm font-medium text-gray-700">Employer Logo</label>
                     <input
